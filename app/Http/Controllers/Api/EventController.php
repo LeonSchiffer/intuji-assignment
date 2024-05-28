@@ -19,6 +19,7 @@ class EventController extends Controller
 
     /**
      * Get a list of events from google calendar
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
@@ -31,17 +32,21 @@ class EventController extends Controller
     /**
      * Create a new event in Google calendar
      */
-    public function store(EventRequest $request): \Illuminate\Http\Response
+    public function store(EventRequest $request): \Illuminate\Http\JsonResponse
     {
         $event = $this->calendar->store(
             EventDto::fromRequest($request)
         );
         Cache::forget("events");
-        return response(EventResource::make($event), 201);
+        return response()->json(
+            EventResource::make($event)->toArray($request),
+            201
+        );
     }
 
     /**
      * Remove the specified event from google calendar
+     * @return \Illuminate\Http\Response
      */
     public function destroy(string $event_id)
     {

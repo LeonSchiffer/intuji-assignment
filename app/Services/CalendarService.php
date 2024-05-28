@@ -12,7 +12,7 @@ class CalendarService
      * @param ?string $start_time
      * @param ?string $end_time
      * @param array<string, mixed> $parameters
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection<int, Event>
      */
     public function getEvents(string $start_time = null, string $end_time = null, array $parameters = [])
     {
@@ -21,7 +21,7 @@ class CalendarService
 
     /**
      * @param EventDto $eventDto
-     * @return Event
+     * @return mixed
      */
     public function store(EventDto $eventDto)
     {
@@ -38,7 +38,7 @@ class CalendarService
      */
     public function find(string $event_id): Event
     {
-        return Event::find($event_id);
+        return dd(Event::find($event_id));
     }
 
     /**
@@ -54,13 +54,14 @@ class CalendarService
     /**
      * Removes the event only if the event list has been cached
      * @param string $event_id
+     * @return void
      */
     public function removeEventFromCache(string $event_id)
     {
         if (!Cache::has("events"))
             return;
 
-        /** @var \Illuminate\Support\Collection<int, Event> $events */
+        /** @var \Illuminate\Support\Collection<int, \Google\Service\Calendar\Event> $events */
         $events = Cache::get("events");
         Cache::set(
             "events",

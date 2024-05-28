@@ -12,6 +12,9 @@ class EventDto
 
     }
 
+    /**
+     * Will create a new EventDto object from a request
+     */
     public static function fromRequest(Request $request): self
     {
         return new self(
@@ -21,6 +24,10 @@ class EventDto
         );
     }
 
+    /**
+     * Convert the object into readable array format
+     * @return array<string, mixed>
+     */
     public function toArray()
     {
         return [
