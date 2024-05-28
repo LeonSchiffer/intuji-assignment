@@ -18,7 +18,7 @@ class EventController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Get a list of events from google calendar
      */
     public function index()
     {
@@ -29,7 +29,7 @@ class EventController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new event in Google calendar
      */
     public function store(EventRequest $request): \Illuminate\Http\Response
     {
@@ -41,15 +41,7 @@ class EventController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
+     * Remove the specified event from google calendar
      */
     public function destroy(string $event_id)
     {

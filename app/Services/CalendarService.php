@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\DataTransferObjects\EventDto;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Spatie\GoogleCalendar\Event;
 
@@ -20,6 +19,10 @@ class CalendarService
         return Event::get();
     }
 
+    /**
+     * @param EventDto $eventDto
+     * @return Event
+     */
     public function store(EventDto $eventDto)
     {
         return Event::create([
@@ -29,17 +32,29 @@ class CalendarService
         ]);
     }
 
+    /**
+     * @param string $event_id
+     * @return Event
+     */
     public function find(string $event_id): Event
     {
         return Event::find($event_id);
     }
 
+    /**
+     * @param string $event_id
+     * @return void
+     */
     public function delete(string $event_id)
     {
         $this->find($event_id)->delete();
         $this->removeEventFromCache($event_id);
     }
 
+    /**
+     * Removes the event only if the event list has been cached
+     * @param string $event_id
+     */
     public function removeEventFromCache(string $event_id)
     {
         if (!Cache::has("events"))
