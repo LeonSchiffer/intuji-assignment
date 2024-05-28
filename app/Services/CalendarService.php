@@ -38,7 +38,7 @@ class CalendarService
      */
     public function find(string $event_id): Event
     {
-        return dd(Event::find($event_id));
+        return Event::find($event_id);
     }
 
     /**
