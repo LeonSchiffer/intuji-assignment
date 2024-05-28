@@ -1,43 +1,8 @@
-    <template>
-        <div class="pa-4 text-center">
-            <v-dialog v-model="dialog" max-width="600">
-                <template v-slot:activator="{ props: activatorProps }">
-                    <v-btn class="text-none font-weight-regular" prepend-icon="mdi-account" text="Edit Profile"
-                        variant="tonal" v-bind="activatorProps"></v-btn>
-                </template>
-                <form @submit="createEvent">
-                    <v-card prepend-icon="mdi-account" title="User Profile">
-                        <v-card-text>
-                            <v-row dense>
-                                <v-col cols="12" sm="12">
-                                    <v-text-field label="Title*" v-model="event.title" required></v-text-field>
-                                </v-col>
-
-                                <v-col cols="12" sm="6">
-                                    <v-text-field label="Start Date Time" v-model="event.start_time"
-                                        type="datetime-local"></v-text-field>
-                                </v-col>
-
-                                <v-col cols="12" sm="6">
-                                    <v-text-field label="End Date Time" v-model="event.end_time"
-                                        type="datetime-local"></v-text-field>
-                                </v-col>
-                            </v-row>
-                        </v-card-text>
-
-                        <v-divider></v-divider>
-
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-
-                            <v-btn text="Close" variant="plain" @click="dialog = false"></v-btn>
-
-                            <v-btn color="primary" text="Save" type="submit" variant="tonal"></v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </form>
-            </v-dialog>
-        </div>
+<script setup>
+    import EventCreate from "@/Components/Events/EventCreate.vue"
+</script>
+<template>
+        <event-create @event-created="eventCreated"/>
         <v-table>
             <thead>
                 <tr>
@@ -84,16 +49,6 @@ export default {
         this.getEvents()
     },
     methods: {
-        createEvent(e) {
-            e.preventDefault()
-            console.log(this.event)
-            axios
-                .post("/api/events", this.event)
-                .then(response => {
-                    this.dialog = false
-                    this.events.push(response.data)
-                })
-        },
         getEvents() {
             axios
                 .get("/api/events")
@@ -108,6 +63,9 @@ export default {
                 .then(response => {
                     this.getEvents()
                 })
+        },
+        eventCreated(event) {
+            this.events.push(event)
         }
     }
 }
