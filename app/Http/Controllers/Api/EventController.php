@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\DataTransferObjects\EventDto;
 use Illuminate\Http\Request;
-use App\Http\Requests\EventRequest;
+use App\Http\Requests\CreateEventRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EventResource;
 use App\Services\CalendarService;
+use Exception;
 use Illuminate\Support\Facades\Cache;
 
 class EventController extends Controller
@@ -32,7 +33,7 @@ class EventController extends Controller
     /**
      * Create a new event in Google calendar
      */
-    public function store(EventRequest $request): \Illuminate\Http\JsonResponse
+    public function store(CreateEventRequest $request): \Illuminate\Http\JsonResponse
     {
         $event = $this->calendar->store(
             EventDto::fromRequest($request)
@@ -44,13 +45,22 @@ class EventController extends Controller
         );
     }
 
+    public function show(string $event_id)
+    {
+        return dd($this->calendar->find($event_id));
+    }
+
     /**
      * Remove the specified event from google calendar
      * @return \Illuminate\Http\Response
      */
     public function destroy(string $event_id)
     {
-        $this->calendar->delete($event_id);
-        return response()->noContent();
+        try {
+            $this->calendar->delete($event_id);
+            return response()->noContent();
+        } catch (Exception $ex) {
+            return response(["message" => $ex->getMessage()], $ex->getCode());
+        }
     }
 }

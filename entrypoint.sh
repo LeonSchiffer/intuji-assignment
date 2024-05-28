@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# composer install
+composer install
 
 # if [ -f ".env" ]; then
 #     echo "env file already exists"
@@ -13,5 +13,5 @@
 # supervisord
 # nohup php artisan queue:work --daemon &
 
-# php artisan serve
+php artisan serve --host=0.0.0.0
 exec docker-php-entrypoint "$@"

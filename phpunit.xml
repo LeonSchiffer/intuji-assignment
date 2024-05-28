@@ -29,5 +29,11 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="GOOGLE_CALENDAR_ID" value="f012e3c23f25aa73f507fd5a912d6647150bce4e4c0ed3fd53a6ba17ddc00ccc@group.calendar.google.com"/>
+        <env name="REDIS_CLIENT" value="predis"/>
+        <env name="REDIS_HOST" value="redis-server"/>
+        <env name="REDIS_PASSWORD" value=""/>
+        <env name="REDIS_PORT" value="6379"/>
+        <env name="CACHE_STORE" value="redis"/>
     </php>
 </phpunit>

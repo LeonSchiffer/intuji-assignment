@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DataTransferObjects\EventDto;
+use Exception;
 use Illuminate\Support\Facades\Cache;
 use Spatie\GoogleCalendar\Event;
 
@@ -47,7 +48,10 @@ class CalendarService
      */
     public function delete(string $event_id)
     {
-        $this->find($event_id)->delete();
+        $event = $this->find($event_id);
+        if (is_null($event))
+            throw new Exception("Event not found", 404);
+        $event->delete();
         $this->removeEventFromCache($event_id);
     }
 
