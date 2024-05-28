@@ -61,7 +61,7 @@ export default {
                     this.dialog = false
                     this.$emit('event-created', response.data)
                 })
-        },
+        }
     }
 }
 
