@@ -15,12 +15,12 @@
 
                         <v-col cols="12" sm="6">
                             <v-text-field label="Start Date Time" v-model="event.start_time"
-                                type="datetime-local"></v-text-field>
+                                type="datetime-local" required></v-text-field>
                         </v-col>
 
                         <v-col cols="12" sm="6">
                             <v-text-field label="End Date Time" v-model="event.end_time"
-                                type="datetime-local"></v-text-field>
+                                type="datetime-local" required></v-text-field>
                         </v-col>
                     </v-row>
                 </v-card-text>
@@ -41,6 +41,7 @@
 </template>
 <script>
 import axios from 'axios';
+import { toast } from 'vue3-toastify';
 
 export default {
     data: () => ({
@@ -60,6 +61,17 @@ export default {
                 .then(response => {
                     this.dialog = false
                     this.$emit('event-created', response.data)
+                    toast.success("Event successfully created")
+                })
+                .catch(err => {
+                    if (err.request.status == 422) {
+                        console.log(err.response.data.errors)
+                        for (let [index, error] of Object.entries(err.response.data.errors)) {
+                            toast.error(error[0])
+                        }
+                        return
+                    }
+                    toast.error(err.response.data.message)
                 })
         }
     }

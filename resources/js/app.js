@@ -9,6 +9,7 @@ import { createVuetify } from 'vuetify/lib/framework.mjs';
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import '@mdi/font/css/materialdesignicons.css'
+import 'vue3-toastify/dist/index.css';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 const vuetify = createVuetify({

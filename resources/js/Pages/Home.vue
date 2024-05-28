@@ -2,10 +2,13 @@
 import EventCreate from "@/Components/Events/EventCreate.vue"
 import EventList from "@/Components/Events/EventList.vue"
 import axios from "axios";
+import { toast } from "vue3-toastify";
 </script>
 <template>
-    <event-create @event-created="eventCreated" />
-    <event-list :events="events" @event-deleted="eventDeleted" />
+    <div class="p-10">
+        <event-create @event-created="eventCreated" />
+        <event-list :events="events" @event-deleted="eventDeleted" />
+    </div>
 </template>
 <script>
 export default {
@@ -18,6 +21,9 @@ export default {
                 .get("/api/events")
                 .then(response => {
                     this.events = response.data.data
+                })
+                .catch(err => {
+                    toast.error(err.response.data.message)
                 })
         },
         eventCreated(event) {

@@ -29,6 +29,8 @@
     </v-table>
 </template>
 <script>
+import { toast } from 'vue3-toastify';
+
 export default {
     props: ['events'],
     data: () => ({
@@ -39,6 +41,10 @@ export default {
             axios.delete("/api/events/" + event_id)
                 .then(response => {
                     this.$emit("event-deleted", event_id)
+                    toast.success("Event has been deleted")
+                })
+                .catch(err => {
+                    toast.error(err.response.data.message)
                 })
         }
     }
