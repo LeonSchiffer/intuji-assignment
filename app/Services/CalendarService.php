@@ -17,7 +17,9 @@ class CalendarService
      */
     public function getEvents(string $start_time = null, string $end_time = null, array $parameters = [])
     {
-        return Event::get();
+        return Event::get(queryParameters: [
+            "timeZone" => "UTC"
+        ]);
     }
 
     /**
@@ -26,7 +28,7 @@ class CalendarService
      */
     public function store(EventDto $eventDto)
     {
-        return Event::create([
+        return Event::create(properties:[
             "name" => $eventDto->title,
             "startDateTime" => $eventDto->start_time,
             "endDateTime" => $eventDto->end_time,

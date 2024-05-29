@@ -4,10 +4,8 @@ namespace App\Events;
 
 use Illuminate\Queue\SerializesModels;
 use App\Listeners\UpdateEventListListener;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Support\Facades\Event;
 
 class CalendarUpdatedEvent extends BaseEvent
 {

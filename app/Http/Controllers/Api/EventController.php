@@ -9,6 +9,7 @@ use App\Http\Requests\CreateEventRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EventResource;
 use App\Services\CalendarService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 
@@ -35,12 +36,13 @@ class EventController extends Controller
      */
     public function store(CreateEventRequest $request): \Illuminate\Http\JsonResponse
     {
+
         $event = $this->calendar->store(
             EventDto::fromRequest($request)
         );
         CalendarUpdatedEvent::dispatch();
         return response()->json(
-            EventResource::make($event)->toArray($request),
+            EventResource::make($event),
             201
         );
     }

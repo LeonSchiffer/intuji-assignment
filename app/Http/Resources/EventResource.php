@@ -18,13 +18,12 @@ class EventResource extends JsonResource
     public function toArray(Request $request): array
     {
         /** @var Event $this */
-
         $googleEvent = $this->googleEvent;
         return [
             "id" => $googleEvent->id,
             "title" => $googleEvent->summary,
-            "start_time" => Carbon::parse($googleEvent->getStart()->dateTime, "Asia/Kathmandu")->format("Y-m-d h:i a"),
-            "end_time" => Carbon::parse($googleEvent->getEnd()->dateTime, "Asia/Kathmandu")->format("Y-m-d h:i a")
+            "start_time" => Carbon::parse($googleEvent->getStart()->dateTime)->utc()->format("Y-m-d h:i a"),
+            "end_time" => Carbon::parse($googleEvent->getEnd()->dateTime)->utc()->format("Y-m-d h:i a")
         ];
     }
 }
