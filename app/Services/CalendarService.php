@@ -35,6 +35,25 @@ class CalendarService
 
     /**
      * @param string $event_id
+     * @param EventDto $eventDto
+     * @return Event
+     */
+    public function update(string $event_id, EventDto $eventDto)
+    {
+        /** @var ?Event $event */
+        $event = $this->find($event_id);
+        if (is_null($event))
+            throw new Exception("Event not found", 404);
+        $event = $event->update([
+            "name" => $eventDto->title,
+            "startDateTime" => $eventDto->start_time,
+            "endDateTime" => $eventDto->end_time,
+        ]);
+        return $event;
+    }
+
+    /**
+     * @param string $event_id
      * @return Event
      */
     public function find(string $event_id): Event
@@ -48,11 +67,12 @@ class CalendarService
      */
     public function delete(string $event_id)
     {
+        /** @var ?Event $event */
         $event = $this->find($event_id);
         if (is_null($event))
             throw new Exception("Event not found", 404);
         $event->delete();
-        $this->removeEventFromCache($event_id);
+        // $this->removeEventFromCache($event_id);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\DataTransferObjects\EventDto;
+use App\Events\CalendarUpdatedEvent;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateEventRequest;
 use App\Http\Controllers\Controller;
@@ -15,7 +16,6 @@ class EventController extends Controller
 {
     public function __construct(private CalendarService $calendar)
     {
-
     }
 
     /**
@@ -38,17 +38,26 @@ class EventController extends Controller
         $event = $this->calendar->store(
             EventDto::fromRequest($request)
         );
-        Cache::forget("events");
+        CalendarUpdatedEvent::dispatch();
         return response()->json(
             EventResource::make($event)->toArray($request),
             201
         );
     }
 
-    public function show(string $event_id)
-    {
-        return dd($this->calendar->find($event_id));
-    }
+    // public function show(string $event_id)
+    // {
+    //     return dd($this->calendar->find($event_id));
+    // }
+
+    // public function update(CreateEventRequest $request, string $event_id): \Illuminate\Http\JsonResponse
+    // {
+    //     $event = $this->calendar->update(
+    //         $event_id,
+    //         EventDto::fromRequest($request)
+    //     );
+    //     return response()->json(EventResource::make($event));
+    // }
 
     /**
      * Remove the specified event from google calendar
@@ -58,6 +67,7 @@ class EventController extends Controller
     {
         try {
             $this->calendar->delete($event_id);
+            CalendarUpdatedEvent::dispatch();
             return response()->noContent();
         } catch (Exception $ex) {
             return response(["message" => $ex->getMessage()], $ex->getCode());

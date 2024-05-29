@@ -1,27 +1,28 @@
 <?php
 
-namespace {{ namespace }};
+namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Queue\SerializesModels;
+use App\Listeners\UpdateEventListListener;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
 
-class {{ class }} extends BaseEvent
+class BaseEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    protected $listeners = [];
+    /** @var array<int, mixed> */
+    protected array $listeners = [];
 
     /**
      * Create a new event instance.
      */
     public function __construct()
     {
-        parent::__construct();
+        foreach ($this->listeners as $listener)
+            Event::listen(static::class, $listener);
     }
 
     /**
