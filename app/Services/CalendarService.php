@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\Cache;
 class CalendarService
 {
     /**
-     * @param ?string $start_time
-     * @param ?string $end_time
-     * @param array<string, mixed> $parameters
      * @return \Illuminate\Support\Collection<int, Event>
      */
     public function getEvents()
