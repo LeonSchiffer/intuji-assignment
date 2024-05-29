@@ -7,13 +7,14 @@ import { toast } from "vue3-toastify";
 <template>
     <div class="p-10">
         <event-create @event-created="eventCreated" />
-        <event-list :events="events" @event-deleted="eventDeleted" />
+        <event-list :events="events" @event-deleted="eventDeleted" :eventListLoading="eventListLoading" />
     </div>
 </template>
 <script>
 export default {
     data: () => ({
-        events: []
+        events: [],
+        eventListLoading: true
     }),
     methods: {
         getEvents() {
@@ -24,6 +25,9 @@ export default {
                 })
                 .catch(err => {
                     toast.error(err.response.data.message)
+                })
+                .finally(() => {
+                    this.eventListLoading = false
                 })
         },
         eventCreated(event) {

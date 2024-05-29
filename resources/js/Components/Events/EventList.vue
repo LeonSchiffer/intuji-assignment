@@ -16,7 +16,7 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody v-if="!eventListLoading">
             <tr v-for="(item, index) in events" :key="item.title">
                 <td>{{ item.title }}</td>
                 <td>{{ item.start_time }}</td>
@@ -27,13 +27,18 @@
                 </td>
             </tr>
         </tbody>
+        <tbody v-else>
+            <tr>
+                <td colspan="4" style="text-align: center;"><v-progress-circular color="primary" indeterminate></v-progress-circular></td>
+            </tr>
+        </tbody>
     </v-table>
 </template>
 <script>
 import { toast } from 'vue3-toastify';
 
 export default {
-    props: ['events'],
+    props: ['events', 'eventListLoading'],
     data: () => ({
         dialog: false,
         deleteLoading: false,
