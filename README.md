@@ -115,11 +115,104 @@ Route::apiResource("/events", EventController::class)->only(["index", "store", "
 ```
 
 #### 3. EventController
+```php
+class EventController extends Controller
+{
+    public function __construct(private CalendarService $calendar)
+    {
+    }
+
+    /**
+     * Get a list of events from google calendar
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function index()
+    {
+        // Check the project for code
+    }
+
+    /**
+     * Create a new event in Google calendar
+     */
+    public function store(CreateEventRequest $request): \Illuminate\Http\JsonResponse
+    {
+
+        // Check the project for code
+    }
+
+    /**
+     * Remove the specified event from google calendar
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(string $event_id)
+    {
+       // Check the project for code
+    }
+}
+
+```
 This controller is response for handling all the API requests.
 
 It has **_index_**, **_store_**, and **_destroy_** methods which does its respective tasks.
 
 #### 4. App\Services\CalendarService
+```php
+<?php
+
+namespace App\Services;
+
+class CalendarService
+{
+    /**
+     * @param ?string $start_time
+     * @param ?string $end_time
+     * @param array<string, mixed> $parameters
+     * @return \Illuminate\Support\Collection<int, Event>
+     */
+    public function getEvents()
+    {
+        // Check the project for code
+    }
+
+    /**
+     * @param EventDto $eventDto
+     * @return mixed
+     */
+    public function store(EventDto $eventDto)
+    {
+        // Check the project for code
+    }
+
+    /**
+     * @param string $event_id
+     * @return Event
+     */
+    public function find(string $event_id): Event
+    {
+        // Check the project for code
+    }
+
+    /**
+     * @param string $event_id
+     * @return void
+     */
+    public function delete(string $event_id)
+    {
+        // Check the project for code
+    }
+
+    /**
+     * Removes the event only if the event list has been cached
+     * @param string $event_id
+     * @return void
+     */
+    public function removeEventFromCache(string $event_id)
+    {
+        // Check the project for code
+    }
+}
+
+```
 Although the controller handles the requests, the logic for manipulating the events is stored inside the CalendarService class.
 
 This is so that the controller doesn't know how the events are being handled and to introduce separation of concerns.
