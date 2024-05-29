@@ -71,3 +71,11 @@ Generate a unique APP_KEY in .env file
 php artisan migrate
 ```
 Database is only used for running queue jobs as the default queue driver is database
+```bash
+npm install
+```
+For installing the node modules
+```bash
+npm run dev
+```
+For starting the node development environment
