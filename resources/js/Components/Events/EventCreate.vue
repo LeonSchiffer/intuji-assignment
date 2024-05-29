@@ -2,8 +2,8 @@
     <div class="pa-4 text-center">
         <v-dialog v-model="dialog" max-width="600">
             <template v-slot:activator="{ props: activatorProps }">
-                <v-btn class="text-none font-weight-regular" prepend-icon="mdi-calendar-plus" text="Create Event"
-                    variant="tonal" v-bind="activatorProps"></v-btn>
+                <v-btn class="text-none font-weight-regular" prepend-icon="mdi-calendar-plus" color="primary"text="Create Event"
+                    v-bind="activatorProps"></v-btn>
             </template>
             <form @submit="createEvent">
                 <v-card prepend-icon="mdi-account" title="User Profile">
@@ -32,10 +32,7 @@
 
                         <v-btn text="Close" variant="plain" @click="dialog = false"></v-btn>
 
-                        <v-btn color="primary" type="submit" variant="elevated">
-                            <v-label v-if="isFormEnabled">Save</v-label>
-                            <v-progress-circular v-else color="white" indeterminate></v-progress-circular>
-                        </v-btn>
+                        <v-btn color="primary" :loading="!isFormEnabled" text="Create" type="submit" variant="elevated"></v-btn>
                     </v-card-actions>
                 </v-card>
             </form>

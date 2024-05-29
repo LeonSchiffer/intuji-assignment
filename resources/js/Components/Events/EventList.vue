@@ -17,12 +17,13 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="item in events" :key="item.title">
+            <tr v-for="(item, index) in events" :key="item.title">
                 <td>{{ item.title }}</td>
                 <td>{{ item.start_time }}</td>
                 <td>{{ item.end_time }}</td>
                 <td>
-                    <v-btn @click="deleteEvent(item.id)" icon="mdi-delete" size="x-small"></v-btn>
+                    <v-btn :loading="(deleteLoading && (index == deleteIndexClicked))"
+                        @click="deleteEvent(item.id, index)" color="primary" icon="mdi-delete" size="x-small"></v-btn>
                 </td>
             </tr>
         </tbody>
@@ -35,9 +36,13 @@ export default {
     props: ['events'],
     data: () => ({
         dialog: false,
+        deleteLoading: false,
+        deleteIndexClicked: null
     }),
     methods: {
-        deleteEvent(event_id) {
+        deleteEvent(event_id, index) {
+            this.deleteIndexClicked = index
+            this.deleteLoading = true
             axios.delete("/api/events/" + event_id)
                 .then(response => {
                     this.$emit("event-deleted", event_id)
@@ -45,6 +50,10 @@ export default {
                 })
                 .catch(err => {
                     toast.error(err.response.data.message)
+                })
+                .finally(() => {
+                    this.deleteIndexClicked = null
+                    this.deleteLoading = false
                 })
         }
     }
