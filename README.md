@@ -72,6 +72,10 @@ php artisan migrate
 ```
 Database is only used for running queue jobs as the default queue driver is database
 ```bash
+php artisan queue:work
+```
+To start the queue process
+```bash
 npm install
 ```
 For installing the node modules
