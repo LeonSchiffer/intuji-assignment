@@ -13,6 +13,14 @@ class CalendarUpdatedEvent extends BaseEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * No need to register events in ServiceProviders
+     * You can just add them to the array here
+     * And it will automatically register them as listeners
+     *
+     * To understand how this works, checkout the BaseEvent parent class
+     * @see \App\Events\BaseEvent
+     */
     protected array $listeners = [
         UpdateEventListListener::class
     ];
@@ -23,17 +31,5 @@ class CalendarUpdatedEvent extends BaseEvent
     public function __construct()
     {
         parent::__construct();
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
-    public function broadcastOn(): array
-    {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
     }
 }
