@@ -40,26 +40,11 @@ class EventController extends Controller
         $event = $this->calendar->store(
             EventDto::fromRequest($request)
         );
-        CalendarUpdatedEvent::dispatch();
         return response()->json(
             EventResource::make($event),
             201
         );
     }
-
-    // public function show(string $event_id)
-    // {
-    //     return dd($this->calendar->find($event_id));
-    // }
-
-    // public function update(CreateEventRequest $request, string $event_id): \Illuminate\Http\JsonResponse
-    // {
-    //     $event = $this->calendar->update(
-    //         $event_id,
-    //         EventDto::fromRequest($request)
-    //     );
-    //     return response()->json(EventResource::make($event));
-    // }
 
     /**
      * Remove the specified event from google calendar
@@ -69,7 +54,6 @@ class EventController extends Controller
     {
         try {
             $this->calendar->delete($event_id);
-            CalendarUpdatedEvent::dispatch();
             return response()->noContent();
         } catch (Exception $ex) {
             return response(["message" => $ex->getMessage()], $ex->getCode());

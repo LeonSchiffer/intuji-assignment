@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
-use App\DataTransferObjects\EventDto;
 use Exception;
-use Illuminate\Support\Facades\Cache;
 use Spatie\GoogleCalendar\Event;
+use App\Events\CalendarUpdatedEvent;
+use App\DataTransferObjects\EventDto;
+use Illuminate\Support\Facades\Cache;
 
 class CalendarService
 {
@@ -15,7 +16,7 @@ class CalendarService
      * @param array<string, mixed> $parameters
      * @return \Illuminate\Support\Collection<int, Event>
      */
-    public function getEvents(string $start_time = null, string $end_time = null, array $parameters = [])
+    public function getEvents()
     {
         return Event::get(queryParameters: [
             "timeZone" => "UTC"
@@ -28,29 +29,12 @@ class CalendarService
      */
     public function store(EventDto $eventDto)
     {
-        return Event::create(properties:[
+        $event = Event::create(properties:[
             "name" => $eventDto->title,
             "startDateTime" => $eventDto->start_time,
             "endDateTime" => $eventDto->end_time,
         ]);
-    }
-
-    /**
-     * @param string $event_id
-     * @param EventDto $eventDto
-     * @return Event
-     */
-    public function update(string $event_id, EventDto $eventDto)
-    {
-        /** @var ?Event $event */
-        $event = $this->find($event_id);
-        if (is_null($event))
-            throw new Exception("Event not found", 404);
-        $event = $event->update([
-            "name" => $eventDto->title,
-            "startDateTime" => $eventDto->start_time,
-            "endDateTime" => $eventDto->end_time,
-        ]);
+        CalendarUpdatedEvent::dispatch();
         return $event;
     }
 
@@ -74,7 +58,7 @@ class CalendarService
         if (is_null($event))
             throw new Exception("Event not found", 404);
         $event->delete();
-        // $this->removeEventFromCache($event_id);
+        $this->removeEventFromCache($event_id);
     }
 
     /**
