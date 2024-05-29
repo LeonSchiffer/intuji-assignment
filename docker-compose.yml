@@ -1,4 +1,4 @@
-version: "3.0"
+version: "3.6"
 services:
     php:
         build:
@@ -16,10 +16,12 @@ services:
             - ./:/var/www/html
         ports:
             - 8000:80
+            - 5173:5173
         networks:
             - default
         depends_on:
             - redis-server
+        tty: true
     redis-server:
         image: redis:latest
         command: redis-server --requirepass "${REDIS_PASSWORD}"
