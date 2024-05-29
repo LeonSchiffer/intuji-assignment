@@ -27,7 +27,7 @@ Supervisor has been setup to start the _**queue process**_ in the backgound. Thi
 You can find the supervisor configuration in **_.docker/supervisor/laravel-worker.conf_** file.
 
 ## 4. Laravel with Inertia (Vue)
-The following project is using Laravel with PHP 8.2 for backend and Inertia with Vue for frontend.
+The following project is using Laravel 11 with PHP 8.2 for backend and Inertia with Vue for frontend.
 
 
 # Installation
@@ -97,6 +97,20 @@ The project does three tasks as mentioned in the docs i.e.
 - List events
 - Create events
 - Delete events
+
+## Tests
+Tests have been written in **_test/Feature/EventTest.php_** file.
+
+To run tests, use:
+```bash
+./vendor/bin/phpunit
+```
+
+## PhpStan
+For code analysis, you can use PhpStan using the command:
+```bash
+./vendor/bin/phpstan
+```
 
 ## Files
 
