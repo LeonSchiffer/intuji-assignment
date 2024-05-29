@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# composer install
+composer install
 
 if [ ! -f ".env" ]; then
     echo "Creating a new env file for $APP_NAME"

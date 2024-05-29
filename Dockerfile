@@ -5,8 +5,6 @@ RUN apt-get update && apt-get install supervisor libzip-dev -y
 RUN docker-php-ext-install pdo_mysql sockets exif mysqli zip
 RUN docker-php-ext-enable mysqli zip
 
-
-
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /var/www/html
