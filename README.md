@@ -79,3 +79,132 @@ For installing the node modules
 npm run dev
 ```
 For starting the node development environment
+
+# Project Structure
+
+## Laravel External Dependencies Used
+- [spatie/laravel-google-calendar](https://github.com/spatie/laravel-google-calendar)
+- predis/predis
+- inertiajs/inertia-laravel
+- [nunomaduro/larastan](https://github.com/larastan/larastan): For code analysis
+  
+## Vue dependencies used
+- [vue3-toastify](https://www.npmjs.com/package/vue3-toastify)
+- [vuetify](https://vuetifyjs.com/)
+
+## Features
+The project does three tasks as mentioned in the docs i.e.
+- List events
+- Create events
+- Delete events
+
+## Files
+
+#### 1. web.php
+The web.php only has one route i.e. the **_"/"_** home route. You can _**list**_, _**create**_ and _**delete events**_ from here.
+```php
+Route::get('/', function () {
+    return Inertia::render("Home");
+});
+```
+
+#### 2. api.php
+This has 3 routes. One for _**listing events**_, another for **_creating events_**, and the last one for **_deleting events_**
+```php
+Route::apiResource("/events", EventController::class)->only(["index", "store", "destroy"]);
+```
+
+#### 3. EventController
+This controller is response for handling all the API requests.
+
+It has **_index_**, **_store_**, and **_destroy_** methods which does its respective tasks.
+
+#### 4. App\Services\CalendarService
+Although the controller handles the requests, the logic for manipulating the events is stored inside the CalendarService class.
+
+This is so that the controller doesn't know how the events are being handled and to introduce separation of concerns.
+
+#### 5. App\DataTransferObjects\EventDto.php
+The **_EventDto_** was created for data handling and management across the application. It also allows for type hinting which makes coding easier.
+
+It is used in **_EventController::store()_** method.
+```php
+class EventDto
+{
+    /**
+     * Will create a new EventDto object from a request
+     */
+    public static function fromRequest(Request $request): self
+    {
+        return new self(
+            title: $request->title,
+            start_time: Carbon::parse($request->start_time),
+            end_time: $request->end_time ? Carbon::parse($request->end_time) : null
+        );
+    }
+
+    /**
+     * Convert the object into readable array format
+     * @return array<string, mixed>
+     */
+    public function toArray()
+    {
+        return [
+            "title" => $this->title,
+            "start_time" => $this->start_time,
+            "end_time" => $this->end_time
+        ];
+    }
+}
+
+```
+
+#### 6. App\Events\CalendarUpdatedEvent.php
+```php
+class CalendarUpdatedEvent extends BaseEvent
+{
+    use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    /**
+     * No need to register events in ServiceProviders
+     * You can just add them to the array here
+     * And it will automatically register them as listeners
+     *
+     * To understand how this works, checkout the BaseEvent parent class
+     * @see \App\Events\BaseEvent
+     */
+    protected array $listeners = [
+        UpdateEventListListener::class
+    ];
+
+    /**
+     * Create a new event instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+}
+
+```
+The **_CalendarUpdatedEvent_** has **_App\Listeners\UpdateEventListListener_** attached to it. 
+
+The **_UpdateEventListListener_** deletes the previous event list cache and updates it with the latest value.
+```php
+class UpdateEventListListener implements ShouldQueue
+{
+    /**
+     * Handle the event.
+     */
+    public function handle(object $event): void
+    {
+        Cache::forget("events");
+        Cache::set("events", (new CalendarService)->getEvents());
+    }
+}
+
+```
+
+This listener class implements the **_ShouldQueue_** interface. This was done as getting a list of events from the calendar api takes time (around 2-3 seconds).
+
+This class also extends the **_BaseEvent_** class. This **_BaseEvent_** class allows us to register the listener in our event class rather than registering it in ServiceProviders.
