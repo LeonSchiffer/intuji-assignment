@@ -1,4 +1,5 @@
 <template>
+    <v-btn color="primary" @click="() => $emit('refresh-event-list')">Refresh Events (Without Cache)</v-btn>
     <v-table>
         <thead>
             <tr>

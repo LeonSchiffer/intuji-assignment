@@ -7,19 +7,20 @@ import { toast } from "vue3-toastify";
 <template>
     <div class="p-10">
         <event-create @event-created="eventCreated" />
-        <event-list :events="events" @event-deleted="eventDeleted" :eventListLoading="eventListLoading" />
+        <event-list :events="events" @event-deleted="eventDeleted" @refresh-event-list="getEvents(true)" :eventListLoading="eventListLoading" />
     </div>
 </template>
 <script>
 export default {
     data: () => ({
         events: [],
-        eventListLoading: true
+        eventListLoading: false
     }),
     methods: {
-        getEvents() {
+        getEvents(without_cache = false) {
+            this.eventListLoading = true;
             axios
-                .get("/api/events")
+                .get("/api/events?without_cache=" + without_cache)
                 .then(response => {
                     this.events = response.data.data
                 })

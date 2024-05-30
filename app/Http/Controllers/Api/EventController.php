@@ -25,6 +25,9 @@ class EventController extends Controller
      */
     public function index()
     {
+        if (request()->boolean("without_cache") == true) {
+            Cache::forget("events");
+        }
         $events = Cache::remember("events", (1 * 60 * 60), function () {
             return $this->calendar->getEvents();
         });
