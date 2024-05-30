@@ -3,6 +3,10 @@ The following project is an assessment task for **_Laravel Developer_** vacancy 
 
 It was completed as per the requirement in the docs and was submitted before **_29 May 2024_**.
 
+[Here](https://calendar.google.com/calendar/u/0?cid=ZjAxMmUzYzIzZjI1YWE3M2Y1MDdmZDVhOTEyZDY2NDcxNTBiY2U0ZTRjMGVkM2ZkNTNhNmJhMTdkZGMwMGNjY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t) 
+is my calendar's sharable link if you don't want to setup your own calendar
+
+
 # Project Overview
 Let me explain the different parts of this project.
 
